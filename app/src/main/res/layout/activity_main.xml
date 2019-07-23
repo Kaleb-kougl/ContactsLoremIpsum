@@ -35,15 +35,15 @@
 
 
         <Button
-            android:id="@+id/push_button"
+            android:id="@+id/add_button"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="16dp"
             android:background="@drawable/button_bg_round"
             android:text="+"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_margin="16dp"
-            android:textSize="32sp"/>
+            android:textSize="32sp" />
     </RelativeLayout>
 
 
