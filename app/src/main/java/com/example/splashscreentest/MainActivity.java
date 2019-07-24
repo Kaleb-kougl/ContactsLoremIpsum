@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        Event listener for the add button
-        TextView add = (TextView) findViewById(R.id.add_button);
+        Button add = (Button) findViewById(R.id.add_button);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -37,12 +38,11 @@ public class MainActivity extends AppCompatActivity {
 //                startActivity(numberIntent);
 
                 final TextView textView = (TextView) findViewById(R.id.first_text_view);
-                final Toast toast = Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT);
                 textView.setText("working on the http request meow");
 
 // Instantiate the RequestQueue.
                 RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-                String url ="http://www.google.com";
+                String url ="https://randomuser.me/api/";
 
 // Request a string response from the provided URL.
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onResponse(String response) {
                                 // Display the first 500 characters of the response string.
                                 textView.setText("Response is: "+ response.substring(0,500));
+                                openDialog();
                             }
                         }, new Response.ErrorListener() {
                     @Override
@@ -63,5 +64,13 @@ public class MainActivity extends AppCompatActivity {
                 queue.add(stringRequest);
             }
         });
+    }
+
+    /**
+     * Should take text to put in the dialog upon opening
+     */
+    public void openDialog() {
+        NewContactDialog dialog = new NewContactDialog();
+        dialog.show(getSupportFragmentManager(), "This is my dialog tag");
     }
 }
