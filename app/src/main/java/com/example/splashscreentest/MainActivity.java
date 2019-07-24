@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,9 +16,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity {
 
-//    for testing purposes
+    /**
+     * This is used to log the error
+     */
     private static final String TAG = "MainActivity";
 
     @Override
@@ -28,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        Event listener for the add button
+        /**
+         * An event listener for the '+' btn
+         */
         Button add = (Button) findViewById(R.id.add_button);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,17 +46,28 @@ public class MainActivity extends AppCompatActivity {
                 final TextView textView = (TextView) findViewById(R.id.first_text_view);
                 textView.setText("working on the http request meow");
 
-// Instantiate the RequestQueue.
+                /**
+                 * Instantiate the RequestQueue.
+                 */
                 RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-                String url ="https://randomuser.me/api/";
+                String url = "https://randomuser.me/api/";
 
-// Request a string response from the provided URL.
+                /**
+                 * Request a string reponse from the provided url
+                 */
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                // Display the first 500 characters of the response string.
-                                textView.setText("Response is: "+ response.substring(0,500));
+                                try {
+                                    JSONObject contactObject = new JSONObject(response);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                /**
+                                 * Display the first 500 chars of the response string
+                                 */
+                                textView.setText("Response is: " + response.substring(0, 500));
                                 openDialog();
                             }
                         }, new Response.ErrorListener() {
@@ -60,7 +77,9 @@ public class MainActivity extends AppCompatActivity {
                         textView.setText("That didn't work!");
                     }
                 });
-// Add the request to the RequestQueue.
+                /**
+                 * Add the request to the RequestQueue
+                 */
                 queue.add(stringRequest);
             }
         });
@@ -70,7 +89,9 @@ public class MainActivity extends AppCompatActivity {
      * Should take text to put in the dialog upon opening
      */
     public void openDialog() {
-        NewContactDialog dialog = new NewContactDialog();
-        dialog.show(getSupportFragmentManager(), "This is my dialog tag");
+//        NewContactDialog dialog = new NewContactDialog();
+//        dialog.show(getSupportFragmentManager(), "This is my dialog tag");
+        ContactDialog dialog = new ContactDialog(MainActivity.this);
+        dialog.show();
     }
 }
