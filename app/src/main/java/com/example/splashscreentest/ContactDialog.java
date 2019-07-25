@@ -95,7 +95,6 @@ public class ContactDialog extends Dialog implements View.OnClickListener {
          * On success it will add the image to the ImageView
          * On fail it does NOTHING.
          */
-//        current set to always throw a VolleyError
         ImageRequest request = new ImageRequest(photoUrl,
                 new Response.Listener<Bitmap>() {
                     @Override
@@ -106,12 +105,9 @@ public class ContactDialog extends Dialog implements View.OnClickListener {
                 new Response.ErrorListener() {
                     public void onErrorResponse(VolleyError error) {
                         System.out.println(error);
-//                        contactPhotoView.setImageResource(R.drawable.image_load_error);
                         if (mContact.isMale()) {
-//                            TODO: FIX THE IMAGE SIZE
                             contactPhotoView.setImageResource(R.drawable.male);
                         } else {
-//                            TODO: FIX THE IMAGE SIZE
                             contactPhotoView.setImageResource(R.drawable.female);
                         }
                     }
