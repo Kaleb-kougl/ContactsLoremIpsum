@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
      * This is used to log the error
      */
     private static final String TAG = "MainActivity";
+    private JSONObject contactJSON;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,54 +33,41 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /**
-         * An event listener for the '+' btn
-         */
+
+        //An event listener for the '+' btn
         Button add = (Button) findViewById(R.id.add_button);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent numberIntent = new Intent(MainActivity.this,
-//                        NumbersActivity.class);
-//                startActivity(numberIntent);
-
                 final TextView textView = (TextView) findViewById(R.id.first_text_view);
-                textView.setText("working on the http request meow");
 
-                /**
-                 * Instantiate the RequestQueue.
-                 */
+                //Instantiate the RequestQueue.
                 RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-                String url = "https://randomuser.me/api/";
+//              TODO: Put this in a resources file
+                final String url = "https://randomuser.me/api/";
 
-                /**
-                 * Request a string reponse from the provided url
-                 */
+                //TODO: Search to see if there is a better way to format this section here
+                //Request a string response from the provided url
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
                                 try {
-                                    JSONObject contactObject = new JSONObject(response);
+                                    contactJSON = new JSONObject(response);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                /**
-                                 * Display the first 500 chars of the response string
-                                 */
-                                textView.setText("Response is: " + response.substring(0, 500));
-                                openDialog();
+                                openDialog(contactJSON);
                             }
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, "onErrorResponse: BAD HTTP REQUEST" + error.toString(), error);
+//                        TODO: Put this a resources file
                         textView.setText("That didn't work!");
                     }
                 });
-                /**
-                 * Add the request to the RequestQueue
-                 */
+                //Add the request to the RequestQueue
                 queue.add(stringRequest);
             }
         });
@@ -87,11 +75,10 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Should take text to put in the dialog upon opening
+     * @param contactJSON - The JSON received from the API
      */
-    public void openDialog() {
-//        NewContactDialog dialog = new NewContactDialog();
-//        dialog.show(getSupportFragmentManager(), "This is my dialog tag");
-        ContactDialog dialog = new ContactDialog(MainActivity.this);
+    public void openDialog(JSONObject contactJSON) {
+        ContactDialog dialog = new ContactDialog(MainActivity.this, contactJSON);
         dialog.show();
     }
 }
