@@ -96,7 +96,7 @@ public class ContactDialog extends Dialog implements View.OnClickListener {
          * On fail it does NOTHING.
          */
 //        current set to always throw a VolleyError
-        ImageRequest request = new ImageRequest(photoUrl + "ksajdf;lkjsd",
+        ImageRequest request = new ImageRequest(photoUrl,
                 new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap bitmap) {
