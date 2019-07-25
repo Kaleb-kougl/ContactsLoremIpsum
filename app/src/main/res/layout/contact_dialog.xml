@@ -32,7 +32,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="4dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="2">
 
             <TextView
                 android:id="@+id/first_name_text_view"
@@ -41,7 +42,8 @@
                 android:layout_marginRight="8dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="First Name"
-                android:textSize="28sp" />
+                android:textSize="24sp"
+                android:layout_weight="1"/>
 
             <TextView
                 android:id="@+id/last_name_text_view"
@@ -50,7 +52,8 @@
                 android:layout_marginLeft="8dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="Last Name"
-                android:textSize="28sp" />
+                android:textSize="24sp"
+                android:layout_weight="1"/>
         </LinearLayout>
 
         <TextView

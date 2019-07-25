@@ -3,7 +3,6 @@ package com.example.splashscreentest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -68,7 +67,7 @@ public class ContactDialog extends Dialog implements View.OnClickListener {
         textView.setText(newText);
     }
 
-    private void formatContactDialog(Contact mContact) {
+    private void formatContactDialog(final Contact mContact) {
         String name = mContact.getFirstName();
         changeTextView(R.id.first_name_text_view, name);
 
@@ -96,7 +95,8 @@ public class ContactDialog extends Dialog implements View.OnClickListener {
          * On success it will add the image to the ImageView
          * On fail it does NOTHING.
          */
-        ImageRequest request = new ImageRequest(photoUrl,
+//        current set to always throw a VolleyError
+        ImageRequest request = new ImageRequest(photoUrl + "ksajdf;lkjsd",
                 new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap bitmap) {
@@ -107,6 +107,13 @@ public class ContactDialog extends Dialog implements View.OnClickListener {
                     public void onErrorResponse(VolleyError error) {
                         System.out.println(error);
 //                        contactPhotoView.setImageResource(R.drawable.image_load_error);
+                        if (mContact.isMale()) {
+//                            TODO: FIX THE IMAGE SIZE
+                            contactPhotoView.setImageResource(R.drawable.male);
+                        } else {
+//                            TODO: FIX THE IMAGE SIZE
+                            contactPhotoView.setImageResource(R.drawable.female);
+                        }
                     }
                 });
         RequestQueue queue = Volley.newRequestQueue(getContext());
