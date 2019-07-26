@@ -90,7 +90,6 @@ public class Contact {
         try {
             JSONArray contactArray = json.getJSONArray("results");
             JSONObject contactObject = contactArray.getJSONObject(0);
-            System.out.println(contactObject);
 
             this.isMale = contactObject.getString("gender").equals("male");
             this.email = contactObject.getString("email");

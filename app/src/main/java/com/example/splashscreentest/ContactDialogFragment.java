@@ -1,6 +1,7 @@
 package com.example.splashscreentest;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ public class ContactDialogFragment extends DialogFragment implements EventListen
     private Button save, cancel;
     private String firstName, lastName, email, address, phoneNumber, birthday, pictureUrl;
     private Boolean isMale;
+    private OnSave dataPasser;
 
     /**
      * empty constructer b/c DialogFragment
@@ -141,6 +143,7 @@ public class ContactDialogFragment extends DialogFragment implements EventListen
             switch (v.getId()) {
                 case R.id.save_button:
 //                    pass data back....
+                    dataPasser.onSave();
                     dismiss();
                     break;
                 case R.id.cancel_button:
@@ -152,5 +155,15 @@ public class ContactDialogFragment extends DialogFragment implements EventListen
             }
         }
     };
+
+    public interface OnSave {
+        void onSave();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        dataPasser = (OnSave) context;
+    }
 
 }

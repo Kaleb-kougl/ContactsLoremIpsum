@@ -21,7 +21,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ContactDialogFragment.OnSave {
 
     /**
      * This is used to log the error
@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private JSONObject contactJSON;
     private ArrayList<Contact> contactsList = new ArrayList<>();
     private Bundle ContactBundle = new Bundle();
+    private Contact currentContact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                Contact mContact = new Contact(contactJSON);
-                                showNewContactDialog(mContact.getBundle());
+                                currentContact = new Contact(contactJSON);
+                                showNewContactDialog(currentContact.getBundle());
 
                             }
                         }, new Response.ErrorListener() {
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Should take text to put in the dialog upon opening
+     *
      * @param contactJSON - The JSON received from the API
      */
     public void openDialog(JSONObject contactJSON) {
@@ -93,5 +95,11 @@ public class MainActivity extends AppCompatActivity {
         ContactDialogFragment contactDialogFragment = ContactDialogFragment.newInstance();
         contactDialogFragment.setArguments(bundle);
         contactDialogFragment.show(fm, "fragment_edit_name");
+    }
+
+    @Override
+    public void onSave() {
+        contactsList.add(currentContact);
+        System.out.println(contactsList.size());
     }
 }
