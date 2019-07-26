@@ -2,7 +2,6 @@ package com.example.splashscreentest;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +18,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     /**
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private static final String TAG = "MainActivity";
     private JSONObject contactJSON;
+    private ArrayList<Contact> contactsList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

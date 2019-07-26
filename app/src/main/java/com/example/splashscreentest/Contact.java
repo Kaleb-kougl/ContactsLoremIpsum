@@ -1,7 +1,6 @@
 package com.example.splashscreentest;
 
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -11,7 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -61,18 +59,9 @@ public class Contact {
         return isMale;
     }
 
-    public Drawable getPicture() {
-        try {
-            InputStream is = (InputStream) new URL(pictureUrlString).getContent();
-            System.out.println(pictureUrlString);
-            Drawable d = Drawable.createFromStream(is, "src");
-            System.out.println(d);
-            return d;
-        } catch (Exception e) {
-            Log.e(TAG, "Exception: " + e);
-            return null;
-        }
-    }
+//    public Drawable getPicture() {
+//        retur
+//    }
 
     public Contact(@NonNull JSONObject json) {
         parseJson(json);

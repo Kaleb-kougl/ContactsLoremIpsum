@@ -27,12 +27,13 @@ public class ContactDialog extends Dialog implements View.OnClickListener {
     public Dialog d;
     private Button save, cancel;
     private final String TAG = "Error occurred when parsing the contact JSON";
-    private final Contact mContact;
+    private Contact mContact;
+//    private DialogListener listener;
 
     public ContactDialog(@NonNull Activity myActivity, @NonNull JSONObject contactJson) {
         super(myActivity);
         this.c = myActivity;
-        mContact = new Contact(contactJson);
+        this.mContact = new Contact(contactJson);
     }
 
     @Override
@@ -51,6 +52,8 @@ public class ContactDialog extends Dialog implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.save_button:
+//                not sure if this is right
+//                saveContact(mContact);
                 dismiss();
                 break;
             case R.id.cancel_button:
@@ -116,5 +119,9 @@ public class ContactDialog extends Dialog implements View.OnClickListener {
         queue.add(request);
     }
 
+//    Not sure if this is right. Things works for the AppCompatDialog fragment, but I have subclassed Dialog
+//    public interface DialogListener {
+//        void saveContact(Contact mContact);
+//    }
 
 }
