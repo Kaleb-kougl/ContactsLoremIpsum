@@ -61,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-//                              TODO: REPLCE THIS WITH A DIALOG FRAGMENT
-//                                openDialog(contactJSON);
                                 Contact mContact = new Contact(contactJSON);
                                 showNewContactDialog(mContact.getBundle());
 

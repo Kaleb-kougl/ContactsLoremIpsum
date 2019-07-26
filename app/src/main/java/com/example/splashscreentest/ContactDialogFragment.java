@@ -128,10 +128,29 @@ public class ContactDialogFragment extends DialogFragment implements EventListen
                 });
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(request);
+
+        Button saveBtn = (Button) view.findViewById(R.id.save_button);
+        saveBtn.setOnClickListener(btnListener);
+
+        Button cancelBtn = (Button) view.findViewById(R.id.cancel_button);
+        cancelBtn.setOnClickListener(btnListener);
     }
 
-    public interface NewContactDialogueListener{
-
-    }
+    private View.OnClickListener btnListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.save_button:
+//                    pass data back....
+                    dismiss();
+                    break;
+                case R.id.cancel_button:
+                    dismiss();
+                    break;
+                default:
+                    dismiss();
+                    break;
+            }
+        }
+    };
 
 }
