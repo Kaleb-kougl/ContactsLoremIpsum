@@ -1,6 +1,7 @@
 package com.example.splashscreentest;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private JSONObject contactJSON;
     private ArrayList<Contact> contactsList = new ArrayList<>();
+    private Bundle ContactBundle = new Bundle();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,11 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                openDialog(contactJSON);
+//                              TODO: REPLCE THIS WITH A DIALOG FRAGMENT
+//                                openDialog(contactJSON);
+                                Contact mContact = new Contact(contactJSON);
+                                showNewContactDialog(mContact.getBundle());
+
                             }
                         }, new Response.ErrorListener() {
                     @Override
@@ -82,5 +88,12 @@ public class MainActivity extends AppCompatActivity {
     public void openDialog(JSONObject contactJSON) {
         ContactDialog dialog = new ContactDialog(MainActivity.this, contactJSON);
         dialog.show();
+    }
+
+    private void showNewContactDialog(Bundle bundle) {
+        FragmentManager fm = getSupportFragmentManager();
+        ContactDialogFragment contactDialogFragment = ContactDialogFragment.newInstance();
+        contactDialogFragment.setArguments(bundle);
+        contactDialogFragment.show(fm, "fragment_edit_name");
     }
 }

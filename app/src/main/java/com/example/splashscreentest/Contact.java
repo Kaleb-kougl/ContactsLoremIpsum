@@ -1,7 +1,6 @@
 package com.example.splashscreentest;
 
-import android.graphics.drawable.Drawable;
-import android.util.Log;
+import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
@@ -9,8 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -25,6 +22,21 @@ public class Contact {
     private boolean isMale;
     private String pictureUrlString;
     private final String TAG = "Something went wrong retrieving the picture";
+    private Bundle contactBundle = new Bundle();
+
+    public Bundle getBundle() {
+        contactBundle.putString("firstName", getFirstName());
+        contactBundle.putString("lastName", getLastName());
+        contactBundle.putString("email", getEmail());
+        contactBundle.putString("number", getNumber());
+        contactBundle.putString("address", getAddress());
+        contactBundle.putString("birthday", getBirthday());
+        contactBundle.putBoolean("isMale", getIsMale());
+        contactBundle.putString("pictureUrl", getPictureUrlString());
+        return contactBundle;
+    }
+
+
 //    private final String JSON_PARSING_TAG = "Error occurred when parsing the contact JSON";
 
     public String getFirstName() {
@@ -51,11 +63,12 @@ public class Contact {
         final String BIRTHDAY_STRING = birthday.format(new Date());
         return BIRTHDAY_STRING;
     }
+
     public String getPictureUrlString() {
         return pictureUrlString;
     }
 
-    public boolean isMale() {
+    public boolean getIsMale() {
         return isMale;
     }
 
@@ -100,9 +113,6 @@ public class Contact {
 
             JSONObject pictureObject = contactObject.getJSONObject("picture");
             this.pictureUrlString = pictureObject.getString("thumbnail");
-            System.out.println(pictureUrlString);
-//            URI pictureUrl = new URI(pictureObject.getString("thumbnail"));
-//            this.pictureUrl = pictureUrl.toURL();
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -110,4 +120,5 @@ public class Contact {
             e.printStackTrace();
         }
     }
+
 }

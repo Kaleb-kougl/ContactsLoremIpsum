@@ -108,7 +108,7 @@ public class ContactDialog extends Dialog implements View.OnClickListener {
                 new Response.ErrorListener() {
                     public void onErrorResponse(VolleyError error) {
                         System.out.println(error);
-                        if (mContact.isMale()) {
+                        if (mContact.getIsMale()) {
                             contactPhotoView.setImageResource(R.drawable.male);
                         } else {
                             contactPhotoView.setImageResource(R.drawable.female);
