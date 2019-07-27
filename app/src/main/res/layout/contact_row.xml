@@ -48,6 +48,13 @@
             android:layout_height="wrap_content"
             android:text="123@example.com" />
     </LinearLayout>
+    <Button
+        android:layout_gravity="center"
+        android:layout_marginLeft="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="Delete"/>
 
 
 </LinearLayout>
