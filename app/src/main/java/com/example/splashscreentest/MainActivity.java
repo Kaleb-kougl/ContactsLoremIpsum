@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -31,12 +33,17 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
     private ArrayList<Contact> contactsList = new ArrayList<>();
     private Bundle ContactBundle = new Bundle();
     private Contact currentContact;
+    private ListView contactsListView;
+    private ListAdapter contactsAdapter; //new ContactAdapter(this, contactsList);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.contactsListView = (ListView) findViewById(R.id.contacts_list_view);
+        this.contactsAdapter = new ContactAdapter(this, contactsList);
 
 
         //An event listener for the '+' btn
@@ -80,15 +87,15 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         });
     }
 
-    /**
-     * Should take text to put in the dialog upon opening
-     *
-     * @param contactJSON - The JSON received from the API
-     */
-    public void openDialog(JSONObject contactJSON) {
-        ContactDialog dialog = new ContactDialog(MainActivity.this, contactJSON);
-        dialog.show();
-    }
+//    /**
+//     * Should take text to put in the dialog upon opening
+//     *
+//     * @param contactJSON - The JSON received from the API
+//     */
+//    public void openDialog(JSONObject contactJSON) {
+//        ContactDialog dialog = new ContactDialog(MainActivity.this, contactJSON);
+//        dialog.show();
+//    }
 
     private void showNewContactDialog(Bundle bundle) {
         FragmentManager fm = getSupportFragmentManager();
@@ -101,5 +108,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
     public void onSave() {
         contactsList.add(currentContact);
         System.out.println(contactsList.size());
+        contactsListView.setVisibility(View.VISIBLE);
+        contactsListView.setAdapter(contactsAdapter);
     }
 }
