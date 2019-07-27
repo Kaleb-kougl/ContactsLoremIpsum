@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -27,7 +29,7 @@ import java.util.EventListener;
 public class ContactDialogFragment extends DialogFragment implements EventListener {
     private Button save, cancel;
     private String firstName, lastName, email, address, phoneNumber, birthday, pictureUrl;
-    private Boolean isMale;
+    private Boolean isMale, hideSave;
     private OnSave dataPasser;
 
     /**
@@ -49,6 +51,7 @@ public class ContactDialogFragment extends DialogFragment implements EventListen
 
     /**
      * Grabs data from bundle, inflates
+     *
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -65,11 +68,13 @@ public class ContactDialogFragment extends DialogFragment implements EventListen
         this.phoneNumber = bundle.getString("number");
         this.birthday = bundle.getString("birthday");
         this.pictureUrl = bundle.getString("pictureUrl");
+        this.hideSave = bundle.getBoolean("hideSave");
         return inflater.inflate(R.layout.contact_dialog, container);
     }
 
     /**
      * gets a dialogue without a title
+     *
      * @param savedInstanceState
      * @return
      */
@@ -84,7 +89,8 @@ public class ContactDialogFragment extends DialogFragment implements EventListen
     /**
      * Set the view to have the data from that bundle
      * Volley request the image to put in the dialogue
-     * @param view - the view to put the data on
+     *
+     * @param view               - the view to put the data on
      * @param savedInstanceState
      */
     @Override
@@ -131,11 +137,19 @@ public class ContactDialogFragment extends DialogFragment implements EventListen
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(request);
 
-        Button saveBtn = (Button) view.findViewById(R.id.save_button);
-        saveBtn.setOnClickListener(btnListener);
-
         Button cancelBtn = (Button) view.findViewById(R.id.cancel_button);
         cancelBtn.setOnClickListener(btnListener);
+
+        Button saveBtn = (Button) view.findViewById(R.id.save_button);
+        if (hideSave) {
+            saveBtn.setVisibility(View.GONE);
+            cancelBtn.setLayoutParams(
+                    new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT
+                    ));
+        } else {
+            saveBtn.setOnClickListener(btnListener);
+        }
     }
 
     private View.OnClickListener btnListener = new View.OnClickListener() {

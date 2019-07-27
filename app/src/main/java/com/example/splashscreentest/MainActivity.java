@@ -108,25 +108,6 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
     public void onSave() {
         contactsList.add(currentContact);
         dbHandler.addContact(currentContact);
-//        contactsListView.setVisibility(View.VISIBLE);
-//        contactsListView.setAdapter(contactsAdapter);
-//        final OnSwipeTouchListener swipeListener = new OnSwipeTouchListener(MainActivity.this) {
-//            public void onSwipeLeft() {
-//                Toast.makeText(MainActivity.this, "swipe: ", Toast.LENGTH_SHORT).show();
-////                return true;
-////                return true;
-//                System.out.println("swipe");
-//            }
-//        };
-//        contactsListView.setOnTouchListener(swipeListener);
-//
-//        contactsListView.setOnItemClickListener(new OnItemClickListener() {
-//            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-//                System.out.println("click");
-//            }
-//        });
-//        hideDefaultText();
-//        System.out.println(dbHandler.databaseToArray());
         updateListView();
     }
 
@@ -164,6 +145,9 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         contactsListView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 System.out.println("click");
+                Bundle bundle = contactsList.get(position).getBundle();
+                bundle.putBoolean("hideSave", true);
+                showNewContactDialog(bundle);
             }
         });
         hideDefaultText();
