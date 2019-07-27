@@ -92,6 +92,9 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
                 queue.add(stringRequest);
             }
         });
+        if (dbHandler.hasContacts()) {
+            getDbContacts();
+        }
     }
 
     private void showNewContactDialog(Bundle bundle) {
@@ -136,6 +139,15 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         void onSwipeLeft(boolean swiped, int position);
     }
 
+    private void getDbContacts() {
+//        ArrayList<Contact> checkme = (ArrayList<Contact>)dbHandler.databaseToArrayList();
+        Contact[] dbContacts = dbHandler.databaseToArray();
+        for (Contact currentContact : dbContacts) {
+            contactsList.add(currentContact);
+        }
+        updateListView();
+    }
+
     private void updateListView() {
         contactsListView.setVisibility(View.VISIBLE);
         contactsListView.setAdapter(contactsAdapter);
@@ -155,6 +167,6 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
             }
         });
         hideDefaultText();
-        System.out.println(dbHandler.databaseToArray());
+//        System.out.println(dbHandler.databaseToArray());
     }
 }

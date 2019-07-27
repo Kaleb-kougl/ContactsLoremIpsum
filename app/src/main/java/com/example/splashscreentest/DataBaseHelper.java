@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 public class DataBaseHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
@@ -72,6 +74,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + TABLE_CONTACTS + " WHERE " + COLUMN_EMAIL + "=\"" + email + "\";");
     }
 
+    public boolean hasContacts() {
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT " + "*" + " FROM " + TABLE_CONTACTS;
+
+        datacursor = db.rawQuery(query, null);
+        if (datacursor.getCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public Contact[] databaseToArray() {
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT " + "*" + " FROM " + TABLE_CONTACTS;
@@ -97,5 +111,32 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         datacursor.close();
         db.close();
         return contacts;
+    }
+
+    public ArrayList<Contact> databaseToArrayList() {
+        ArrayList<Contact> contactsList = new ArrayList<>();
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT " + "*" + " FROM " + TABLE_CONTACTS;
+
+        datacursor = db.rawQuery(query, null);
+//        Contact[] contacts = new Contact[datacursor.getCount()];
+        while (datacursor.moveToNext()) {
+            Contact currentContact = new Contact(
+                    datacursor.getString(1),
+                    datacursor.getString(2),
+                    datacursor.getString(3),
+                    datacursor.getString(4),
+                    datacursor.getString(5),
+                    datacursor.getString(6),
+                    datacursor.getString(7),
+                    datacursor.getString(8)
+            );
+            contactsList.add(currentContact);
+        }
+
+        datacursor.close();
+        db.close();
+
+        return contactsList;
     }
 }
