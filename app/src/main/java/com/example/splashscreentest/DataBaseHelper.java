@@ -31,7 +31,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 COLUMN_FIRSTNAME + " TEXT, " +
                 COLUMN_LASTNAME + " TEXT, " +
-                COLUMN_EMAIL + " TEXT, " +
+                COLUMN_EMAIL + " TEXT UNIQUE, " +
                 COLUMN_NUMBER + " TEXT, " +
                 COLUMN_ADDRESS + " TEXT, " +
                 COLUMN_BIRTHDAY + " TEXT, " +
@@ -61,5 +61,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_CONTACTS, null, values);
         db.close();
+    }
+
+//    Delete a contact from the db
+    public void deleteContact(String email) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_CONTACTS + " WHERE " + COLUMN_EMAIL + "=\"" + email + "\";");
     }
 }
