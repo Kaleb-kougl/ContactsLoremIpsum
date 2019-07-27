@@ -21,7 +21,6 @@ public class Contact {
     private SimpleDateFormat birthday;
     private boolean isMale;
     private String pictureUrlString;
-    private final String TAG = "Something went wrong retrieving the picture";
     private Bundle contactBundle = new Bundle();
 
     public Bundle getBundle() {
@@ -35,9 +34,6 @@ public class Contact {
         contactBundle.putString("pictureUrl", getPictureUrlString());
         return contactBundle;
     }
-
-
-//    private final String JSON_PARSING_TAG = "Error occurred when parsing the contact JSON";
 
     public String getFirstName() {
         return StringFormatter.capitalizeWord(firstName);
@@ -71,10 +67,6 @@ public class Contact {
     public boolean getIsMale() {
         return isMale;
     }
-
-//    public Drawable getPicture() {
-//        retur
-//    }
 
     public Contact(@NonNull JSONObject json) {
         parseJson(json);
