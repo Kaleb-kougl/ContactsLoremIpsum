@@ -1,15 +1,21 @@
 package com.example.splashscreentest;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MotionEventCompat;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -34,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
     private Bundle ContactBundle = new Bundle();
     private Contact currentContact;
     private ListView contactsListView;
-    private ListAdapter contactsAdapter; //new ContactAdapter(this, contactsList);
+    private ListAdapter contactsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
                 //Instantiate the RequestQueue.
                 RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
 //              TODO: Put this in a resources file
-                final String url = "https://randomuser.me/api/";
+                final String url = "https://randomuser.me/api/?nat=us";
 
                 //TODO: Search to see if there is a better way to format this section here
                 //Request a string response from the provided url
@@ -87,16 +93,6 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         });
     }
 
-//    /**
-//     * Should take text to put in the dialog upon opening
-//     *
-//     * @param contactJSON - The JSON received from the API
-//     */
-//    public void openDialog(JSONObject contactJSON) {
-//        ContactDialog dialog = new ContactDialog(MainActivity.this, contactJSON);
-//        dialog.show();
-//    }
-
     private void showNewContactDialog(Bundle bundle) {
         FragmentManager fm = getSupportFragmentManager();
         ContactDialogFragment contactDialogFragment = ContactDialogFragment.newInstance();
@@ -107,8 +103,27 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
     @Override
     public void onSave() {
         contactsList.add(currentContact);
-        System.out.println(contactsList.size());
         contactsListView.setVisibility(View.VISIBLE);
         contactsListView.setAdapter(contactsAdapter);
+        contactsListView.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
+            public void onSwipeLeft() {
+                Toast.makeText(MainActivity.this, "left", Toast.LENGTH_SHORT).show();
+            }
+        });
+        contactsListView.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                Toast.makeText(MainActivity.this, "touch: " + position, Toast.LENGTH_SHORT).show();
+            }
+        });
+        hideDefaultText();
+    }
+
+    private void hideDefaultText() {
+        LinearLayout emptyData = (LinearLayout) findViewById(R.id.empty_text_view);
+        emptyData.setVisibility(View.GONE);
+    }
+
+    interface SwipeEvents {
+        void onSwipeLeft(boolean swiped, int position);
     }
 }

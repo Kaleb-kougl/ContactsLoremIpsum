@@ -15,7 +15,6 @@ import java.util.ArrayList;
 public class ContactAdapter extends ArrayAdapter {
 
     public ContactAdapter(Context context, ArrayList<Contact> resource) {
-        //Todo: make a custom contact_row
         super(context, R.layout.contact_row, resource);
 
     }
