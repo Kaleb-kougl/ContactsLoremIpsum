@@ -3,13 +3,14 @@ package com.example.splashscreentest;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
-//    will need an idea, and then every other field
+    //    will need an idea, and then every other field
     private static final String DATABASE_NAME = "contacts.db";
     public static final String TABLE_CONTACTS = "contacts";
     public static final String COLUMN_ID = "_id";
@@ -21,6 +22,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_BIRTHDAY = "birthday";
     public static final String COLUMN_PICTURE = "picture";
     public static final String COLUMN_ISMALE = "ismale";
+    Cursor datacursor;
 
     public DataBaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -48,7 +50,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-//    Add new row to the db
+    //    Add new row to the db
     public void addContact(Contact contact) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_FIRSTNAME, contact.getFirstName());
@@ -64,27 +66,36 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-//    Delete a contact from the db
+    //    Delete a contact from the db
     public void deleteContact(String email) {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_CONTACTS + " WHERE " + COLUMN_EMAIL + "=\"" + email + "\";");
     }
 
-    public String databaseToString() {
-        String dbString = "";
+    public Contact[] databaseToArray() {
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_CONTACTS + " WHERE 1";
+        String query = "SELECT " + "*" + " FROM " + TABLE_CONTACTS;
 
-        Cursor c = db.rawQuery(query, null);
-        c.moveToFirst();
-
-        while (!c.isAfterLast()){
-            if(c.getString(c.getColumnIndex("contactFirstName")) != null) {
-                dbString += c.getString(c.getColumnIndex("contactFirstName"));
-                dbString += "\n";
-            }
+        datacursor = db.rawQuery(query, null);
+        Contact[] contacts = new Contact[datacursor.getCount()];
+        int i = 0;
+        while (datacursor.moveToNext()) {
+            Contact currentContact = new Contact(
+                    datacursor.getString(1),
+                    datacursor.getString(2),
+                    datacursor.getString(3),
+                    datacursor.getString(4),
+                    datacursor.getString(5),
+                    datacursor.getString(6),
+                    datacursor.getString(7),
+                    datacursor.getString(8)
+            );
+            contacts[i] = currentContact;
+            i++;
         }
+
+        datacursor.close();
         db.close();
-        return dbString;
+        return contacts;
     }
 }

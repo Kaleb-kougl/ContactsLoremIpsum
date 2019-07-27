@@ -19,6 +19,7 @@ public class Contact {
     private String number;
     private String address;
     private SimpleDateFormat birthday;
+    private String birthday_string;
     private boolean isMale;
     private String pictureUrlString;
     private Bundle contactBundle = new Bundle();
@@ -56,8 +57,7 @@ public class Contact {
     }
 
     public String getBirthday() {
-        final String BIRTHDAY_STRING = birthday.format(new Date());
-        return BIRTHDAY_STRING;
+        return birthday_string;
     }
 
     public String getPictureUrlString() {
@@ -70,6 +70,24 @@ public class Contact {
 
     public Contact(@NonNull JSONObject json) {
         parseJson(json);
+    }
+
+    public Contact(@NonNull String firstName,
+                   @NonNull String lastName,
+                   @NonNull String email,
+                   @NonNull String number,
+                   @NonNull String address,
+                   @NonNull String birthday,
+                   @NonNull String pictureUrl,
+                   @NonNull String isMale) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.number = number;
+        this.address = address;
+        this.birthday = new SimpleDateFormat(birthday);
+        this.pictureUrlString = pictureUrl;
+        this.isMale = Boolean.valueOf(isMale);
     }
 
     /**
@@ -97,7 +115,8 @@ public class Contact {
             dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
             dateFormat.parse(dobObject.getString("date"));
             dateFormat.applyPattern("MM/dd/YYYY");
-            this.birthday = dateFormat;
+            this.birthday_string = dateFormat.format(new Date());
+//            this.birthday = dateFormat;
 
             JSONObject addressObject = contactObject.getJSONObject("location");
             this.address = addressObject.getString("street");

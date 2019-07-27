@@ -41,12 +41,14 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
     private Contact currentContact;
     private ListView contactsListView;
     private ListAdapter contactsAdapter;
+    private DataBaseHelper dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        dbHandler = new DataBaseHelper(this, null, null, 1);
 
         this.contactsListView = (ListView) findViewById(R.id.contacts_list_view);
         this.contactsAdapter = new ContactAdapter(this, contactsList);
@@ -64,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
 //              TODO: Put this in a resources file
                 final String url = "https://randomuser.me/api/?nat=us";
 
-                //TODO: Search to see if there is a better way to format this section here
                 //Request a string response from the provided url
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                         new Response.Listener<String>() {
@@ -103,6 +104,39 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
     @Override
     public void onSave() {
         contactsList.add(currentContact);
+        dbHandler.addContact(currentContact);
+//        contactsListView.setVisibility(View.VISIBLE);
+//        contactsListView.setAdapter(contactsAdapter);
+//        final OnSwipeTouchListener swipeListener = new OnSwipeTouchListener(MainActivity.this) {
+//            public void onSwipeLeft() {
+//                Toast.makeText(MainActivity.this, "swipe: ", Toast.LENGTH_SHORT).show();
+////                return true;
+////                return true;
+//                System.out.println("swipe");
+//            }
+//        };
+//        contactsListView.setOnTouchListener(swipeListener);
+//
+//        contactsListView.setOnItemClickListener(new OnItemClickListener() {
+//            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+//                System.out.println("click");
+//            }
+//        });
+//        hideDefaultText();
+//        System.out.println(dbHandler.databaseToArray());
+        updateListView();
+    }
+
+    private void hideDefaultText() {
+        LinearLayout emptyData = (LinearLayout) findViewById(R.id.empty_text_view);
+        emptyData.setVisibility(View.GONE);
+    }
+
+    interface SwipeEvents {
+        void onSwipeLeft(boolean swiped, int position);
+    }
+
+    private void updateListView() {
         contactsListView.setVisibility(View.VISIBLE);
         contactsListView.setAdapter(contactsAdapter);
         final OnSwipeTouchListener swipeListener = new OnSwipeTouchListener(MainActivity.this) {
@@ -121,14 +155,6 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
             }
         });
         hideDefaultText();
-    }
-
-    private void hideDefaultText() {
-        LinearLayout emptyData = (LinearLayout) findViewById(R.id.empty_text_view);
-        emptyData.setVisibility(View.GONE);
-    }
-
-    interface SwipeEvents {
-        void onSwipeLeft(boolean swiped, int position);
+        System.out.println(dbHandler.databaseToArray());
     }
 }
