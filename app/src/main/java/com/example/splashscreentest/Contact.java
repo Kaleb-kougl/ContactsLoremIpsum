@@ -87,7 +87,7 @@ public class Contact {
         this.address = address;
         this.birthday = new SimpleDateFormat(birthday);
         this.pictureUrlString = pictureUrl;
-        this.isMale = Boolean.valueOf(isMale);
+        this.isMale = isMale.equals("1");
     }
 
     /**
