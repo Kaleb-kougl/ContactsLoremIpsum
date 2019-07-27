@@ -105,14 +105,19 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         contactsList.add(currentContact);
         contactsListView.setVisibility(View.VISIBLE);
         contactsListView.setAdapter(contactsAdapter);
-        contactsListView.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
+        final OnSwipeTouchListener swipeListener = new OnSwipeTouchListener(MainActivity.this) {
             public void onSwipeLeft() {
-                Toast.makeText(MainActivity.this, "left", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "swipe: ", Toast.LENGTH_SHORT).show();
+//                return true;
+//                return true;
+                System.out.println("swipe");
             }
-        });
+        };
+        contactsListView.setOnTouchListener(swipeListener);
+
         contactsListView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                Toast.makeText(MainActivity.this, "touch: " + position, Toast.LENGTH_SHORT).show();
+                System.out.println("click");
             }
         });
         hideDefaultText();
