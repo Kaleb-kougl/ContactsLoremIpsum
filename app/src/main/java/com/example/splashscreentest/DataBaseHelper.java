@@ -2,6 +2,7 @@ package com.example.splashscreentest;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -67,5 +68,23 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void deleteContact(String email) {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_CONTACTS + " WHERE " + COLUMN_EMAIL + "=\"" + email + "\";");
+    }
+
+    public String databaseToString() {
+        String dbString = "";
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_CONTACTS + " WHERE 1";
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        while (!c.isAfterLast()){
+            if(c.getString(c.getColumnIndex("contactFirstName")) != null) {
+                dbString += c.getString(c.getColumnIndex("contactFirstName"));
+                dbString += "\n";
+            }
+        }
+        db.close();
+        return dbString;
     }
 }
