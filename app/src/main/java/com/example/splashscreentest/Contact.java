@@ -1,6 +1,5 @@
 package com.example.splashscreentest;
 
-import android.graphics.Movie;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -117,7 +116,6 @@ public class Contact implements Comparable<Contact>{
             dateFormat.parse(dobObject.getString("date"));
             dateFormat.applyPattern("MM/dd/YYYY");
             this.birthday_string = dateFormat.format(new Date());
-//            this.birthday = dateFormat;
 
             JSONObject addressObject = contactObject.getJSONObject("location");
             this.address = addressObject.getString("street");

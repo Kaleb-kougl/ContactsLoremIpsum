@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,7 +26,6 @@ import com.android.volley.toolbox.Volley;
 import java.util.EventListener;
 
 public class ContactDialogFragment extends DialogFragment implements EventListener {
-    private Button save, cancel;
     private String firstName, lastName, email, address, phoneNumber, birthday, pictureUrl;
     private Boolean isMale, hideSave;
     private OnSave dataPasser;
@@ -96,8 +94,6 @@ public class ContactDialogFragment extends DialogFragment implements EventListen
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Get field from view
-//        mEditText = (EditText) view.findViewById(R.id.txt_your_name);
         TextView firstName = (TextView) view.findViewById(R.id.first_name_text_view);
         firstName.setText(this.firstName);
         TextView lastName = (TextView) view.findViewById(R.id.last_name_text_view);

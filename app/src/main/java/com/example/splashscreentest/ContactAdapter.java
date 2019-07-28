@@ -15,8 +15,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 public class ContactAdapter extends ArrayAdapter {
@@ -31,7 +29,6 @@ public class ContactAdapter extends ArrayAdapter {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View contactView = inflater.inflate(R.layout.contact_row, parent, false);
 
-//        TODO: Make an array of contacts in the main activity
         Contact currentContact = (Contact) getItem(position);
         final ImageView contactImage = (ImageView) contactView.findViewById(
                 R.id.contact_row_image_view);
@@ -39,8 +36,6 @@ public class ContactAdapter extends ArrayAdapter {
                 R.id.contact_row_first_name_text_view);
         TextView contactLastName = (TextView) contactView.findViewById(
                 R.id.contact_row_last_name_text_view);
-//        Should I make this like a seperate object to handle all these internet requests...
-//        contactImage.setImageResource(...)
         contactFirstName.setText(currentContact.getFirstName());
         contactLastName.setText(currentContact.getLastName());
         if (currentContact.getIsMale()) {

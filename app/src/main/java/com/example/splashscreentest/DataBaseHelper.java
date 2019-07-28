@@ -3,7 +3,6 @@ package com.example.splashscreentest;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 public class DataBaseHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
-    //    will need an idea, and then every other field
     private static final String DATABASE_NAME = "contacts.db";
     public static final String TABLE_CONTACTS = "contacts";
     public static final String COLUMN_ID = "_id";
@@ -24,7 +22,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_BIRTHDAY = "birthday";
     public static final String COLUMN_PICTURE = "picture";
     public static final String COLUMN_ISMALE = "ismale";
-    Cursor datacursor;
+    private Cursor dataCursor;
 
     public DataBaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -78,8 +76,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT " + "*" + " FROM " + TABLE_CONTACTS;
 
-        datacursor = db.rawQuery(query, null);
-        if (datacursor.getCount() > 0) {
+        dataCursor = db.rawQuery(query, null);
+        if (dataCursor.getCount() > 0) {
             return true;
         } else {
             return false;
@@ -90,25 +88,25 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT " + "*" + " FROM " + TABLE_CONTACTS;
 
-        datacursor = db.rawQuery(query, null);
-        Contact[] contacts = new Contact[datacursor.getCount()];
+        dataCursor = db.rawQuery(query, null);
+        Contact[] contacts = new Contact[dataCursor.getCount()];
         int i = 0;
-        while (datacursor.moveToNext()) {
+        while (dataCursor.moveToNext()) {
             Contact currentContact = new Contact(
-                    datacursor.getString(1),
-                    datacursor.getString(2),
-                    datacursor.getString(3),
-                    datacursor.getString(4),
-                    datacursor.getString(5),
-                    datacursor.getString(6),
-                    datacursor.getString(7),
-                    datacursor.getString(8)
+                    dataCursor.getString(1),
+                    dataCursor.getString(2),
+                    dataCursor.getString(3),
+                    dataCursor.getString(4),
+                    dataCursor.getString(5),
+                    dataCursor.getString(6),
+                    dataCursor.getString(7),
+                    dataCursor.getString(8)
             );
             contacts[i] = currentContact;
             i++;
         }
 
-        datacursor.close();
+        dataCursor.close();
         db.close();
         return contacts;
     }
@@ -118,23 +116,23 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT " + "*" + " FROM " + TABLE_CONTACTS;
 
-        datacursor = db.rawQuery(query, null);
-//        Contact[] contacts = new Contact[datacursor.getCount()];
-        while (datacursor.moveToNext()) {
+        dataCursor = db.rawQuery(query, null);
+//        Contact[] contacts = new Contact[dataCursor.getCount()];
+        while (dataCursor.moveToNext()) {
             Contact currentContact = new Contact(
-                    datacursor.getString(1),
-                    datacursor.getString(2),
-                    datacursor.getString(3),
-                    datacursor.getString(4),
-                    datacursor.getString(5),
-                    datacursor.getString(6),
-                    datacursor.getString(7),
-                    datacursor.getString(8)
+                    dataCursor.getString(1),
+                    dataCursor.getString(2),
+                    dataCursor.getString(3),
+                    dataCursor.getString(4),
+                    dataCursor.getString(5),
+                    dataCursor.getString(6),
+                    dataCursor.getString(7),
+                    dataCursor.getString(8)
             );
             contactsList.add(currentContact);
         }
 
-        datacursor.close();
+        dataCursor.close();
         db.close();
 
         return contactsList;
