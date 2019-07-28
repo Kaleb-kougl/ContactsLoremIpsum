@@ -217,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 searchView.setQuery("", true);
+                searchView.clearFocus();
                 return true; // Return true to collapse action view
             }
         });
