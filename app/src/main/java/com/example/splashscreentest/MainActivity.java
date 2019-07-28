@@ -1,12 +1,10 @@
 package com.example.splashscreentest;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.MotionEventCompat;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
@@ -29,7 +27,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 public class MainActivity extends AppCompatActivity implements ContactDialogFragment.OnSave {
 
@@ -39,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
     private static final String TAG = "MainActivity";
     private JSONObject contactJSON;
     private ArrayList<Contact> contactsList = new ArrayList<>();
-    private Bundle ContactBundle = new Bundle();
     private Contact currentContact;
     private ListView contactsListView;
     private ListAdapter contactsAdapter;
@@ -136,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
 
     private void updateListView() {
         Collections.sort(contactsList);
-        System.out.println(contactsList.get(contactsList.size() - 1).getFirstName());
 
         contactsListView.invalidateViews();
 
@@ -153,14 +148,12 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
 
         contactsListView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                System.out.println("click");
                 Bundle bundle = contactsList.get(position).getBundle();
                 bundle.putBoolean("hideSave", true);
                 showNewContactDialog(bundle);
             }
         });
         hideDefaultText();
-//        System.out.println(dbHandler.databaseToArray());
     }
 
     private void insert(Contact newContact) {
