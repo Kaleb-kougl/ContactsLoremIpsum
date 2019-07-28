@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
 
         this.contactsListView = (ListView) findViewById(R.id.contacts_list_view);
         this.contactsAdapter = new ContactAdapter(this, contactsList);
+        contactsListView.setAdapter(contactsAdapter);
 
 
         //An event listener for the '+' btn
@@ -108,7 +109,8 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
 
     @Override
     public void onSave() {
-        contactsList.add(currentContact);
+//        contactsList.add(currentContact);
+        insert(currentContact);
         dbHandler.addContact(currentContact);
         updateListView();
     }
@@ -128,14 +130,17 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         for (Contact currentContact : dbContacts) {
             contactsList.add(currentContact);
         }
-        Collections.sort(contactsList);
 
         updateListView();
     }
 
     private void updateListView() {
+        Collections.sort(contactsList);
+        System.out.println(contactsList.get(contactsList.size() - 1).getFirstName());
+
+        contactsListView.invalidateViews();
+
         contactsListView.setVisibility(View.VISIBLE);
-        contactsListView.setAdapter(contactsAdapter);
         final OnSwipeTouchListener swipeListener = new OnSwipeTouchListener(MainActivity.this) {
             public void onSwipeLeft() {
                 Toast.makeText(MainActivity.this, "swipe: ", Toast.LENGTH_SHORT).show();
@@ -156,5 +161,12 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         });
         hideDefaultText();
 //        System.out.println(dbHandler.databaseToArray());
+    }
+
+    private void insert(Contact newContact) {
+        int pos = Collections.binarySearch(contactsList, newContact);
+        if (pos < 0) {
+            contactsList.add(-pos-1, newContact);
+        }
     }
 }
