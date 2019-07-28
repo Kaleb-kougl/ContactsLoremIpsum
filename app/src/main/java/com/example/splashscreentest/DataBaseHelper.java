@@ -34,7 +34,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 COLUMN_FIRSTNAME + " TEXT, " +
                 COLUMN_LASTNAME + " TEXT, " +
-                COLUMN_EMAIL + " TEXT UNIQUE, " +
+                COLUMN_EMAIL + " TEXT, " +
                 COLUMN_NUMBER + " TEXT, " +
                 COLUMN_ADDRESS + " TEXT, " +
                 COLUMN_BIRTHDAY + " TEXT, " +
