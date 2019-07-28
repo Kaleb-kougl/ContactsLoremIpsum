@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,11 +19,15 @@ import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
 
-public class ContactAdapter extends ArrayAdapter {
+public class ContactAdapter extends ArrayAdapter implements Filterable {
+    private ArrayList<Contact> contactsList;
+    private ArrayList<Contact> contactsListFull;
 
     public ContactAdapter(Context context, ArrayList<Contact> resource) {
         super(context, R.layout.contact_row, resource);
-
+        this.contactsList = resource;
+//        to create separate object in memory
+        this.contactsListFull = new ArrayList<>(resource);
     }
 
     @Override
@@ -66,4 +72,47 @@ public class ContactAdapter extends ArrayAdapter {
         queue.add(request);
         return contactView;
     }
+
+    @Override
+    public Filter getFilter() {
+        return firstNameFilter;
+    }
+
+    /**
+     * A filter to see if the contacts first name contains the users text
+     */
+    private Filter firstNameFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            ArrayList<Contact> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(contactsList);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (Contact item : contactsListFull) {
+                    if (item.getFirstName().toLowerCase().trim().contains(filterPattern)){
+                        filteredList.add(item);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        /**
+         * Publishes the results of the filter to the UI
+         * @param charSequence
+         * @param filterResults - the results of the filter
+         */
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            contactsList.clear();
+            contactsList.addAll((ArrayList)filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
+
 }
