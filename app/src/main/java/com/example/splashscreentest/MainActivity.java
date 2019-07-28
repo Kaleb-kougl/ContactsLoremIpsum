@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         menuInflater.inflate(R.menu.search_menu, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
+        final SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             /**
              * Wont use this one because we want to filter in real-time
@@ -204,6 +204,20 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
             public boolean onQueryTextChange(String s) {
                 contactsAdapter.getFilter().filter(s);
                 return false;
+            }
+        });
+
+        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                //Nothing to do here
+                return true; // Return true to expand action view
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                searchView.setQuery("", true);
+                return true; // Return true to collapse action view
             }
         });
         return true;
