@@ -5,6 +5,9 @@ import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
@@ -12,6 +15,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
     private ArrayList<Contact> contactsList = new ArrayList<>();
     private Contact currentContact;
     private ListView contactsListView;
-    private ListAdapter contactsAdapter;
+    private ContactAdapter contactsAdapter;
     private DataBaseHelper dbHandler;
 
     @Override
@@ -49,6 +53,9 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         dbHandler = new DataBaseHelper(this, null, null, 1);
 
         this.contactsListView = (ListView) findViewById(R.id.contacts_list_view);
+        if (dbHandler.hasContacts()) {
+            getDbContacts();
+        }
         this.contactsAdapter = new ContactAdapter(this, contactsList);
         contactsListView.setAdapter(contactsAdapter);
 
@@ -97,9 +104,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
                 queue.add(stringRequest);
             }
         });
-        if (dbHandler.hasContacts()) {
-            getDbContacts();
-        }
+
     }
 
     private void showNewContactDialog(Bundle bundle) {
@@ -167,5 +172,40 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         if (pos < 0) {
             contactsList.add(-pos-1, newContact);
         }
+    }
+
+    /**
+     * This creates our custom options menu
+     * @param menu
+     * @return
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.search_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            /**
+             * Wont use this one because we want to filter in real-time
+             */
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            /**
+             * Will use this one to query in real-time
+             * @param s
+             * @return
+             */
+            @Override
+            public boolean onQueryTextChange(String s) {
+                contactsAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
+        return true;
     }
 }

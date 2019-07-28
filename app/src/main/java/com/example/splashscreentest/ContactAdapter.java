@@ -87,9 +87,11 @@ public class ContactAdapter extends ArrayAdapter implements Filterable {
             ArrayList<Contact> filteredList = new ArrayList<>();
 
             if (constraint == null || constraint.length() == 0) {
-                filteredList.addAll(contactsList);
+                System.out.println(contactsListFull);
+                filteredList.addAll(contactsListFull);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
+                System.out.println(filterPattern);
 
                 for (Contact item : contactsListFull) {
                     if (item.getFirstName().toLowerCase().trim().contains(filterPattern)){
