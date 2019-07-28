@@ -1,5 +1,6 @@
 package com.example.splashscreentest;
 
+import android.graphics.Movie;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,7 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class Contact {
+public class Contact implements Comparable<Contact>{
     private String firstName;
     private String lastName;
     private String email;
@@ -131,4 +132,8 @@ public class Contact {
         }
     }
 
+    @Override
+    public int compareTo(Contact contact) {
+        return this.firstName.compareTo(contact.getFirstName());
+    }
 }

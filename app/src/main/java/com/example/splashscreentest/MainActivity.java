@@ -28,6 +28,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class MainActivity extends AppCompatActivity implements ContactDialogFragment.OnSave {
 
@@ -126,6 +128,8 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         for (Contact currentContact : dbContacts) {
             contactsList.add(currentContact);
         }
+        Collections.sort(contactsList);
+
         updateListView();
     }
 
