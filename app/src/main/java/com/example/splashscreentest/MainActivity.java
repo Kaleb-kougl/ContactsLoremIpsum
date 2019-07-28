@@ -76,7 +76,9 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
                                     e.printStackTrace();
                                 }
                                 currentContact = new Contact(contactJSON);
-                                showNewContactDialog(currentContact.getBundle());
+                                Bundle bundle = currentContact.getBundle();
+                                bundle.putBoolean("error", false);
+                                showNewContactDialog(bundle);
 
                             }
                         }, new Response.ErrorListener() {
@@ -84,7 +86,11 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, "onErrorResponse: BAD HTTP REQUEST" + error.toString(), error);
 //                        TODO: Put this a resources file
-                        textView.setText("That didn't work!");
+                        System.out.println("something went wrong" + error);
+                        Bundle errorBundle = new Bundle();
+                        errorBundle.putBoolean("error", true);
+                        errorBundle.putBoolean("hideSave", true);
+                        showNewContactDialog(errorBundle);
                     }
                 });
                 //Add the request to the RequestQueue
@@ -100,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         FragmentManager fm = getSupportFragmentManager();
         ContactDialogFragment contactDialogFragment = ContactDialogFragment.newInstance();
         contactDialogFragment.setArguments(bundle);
-        contactDialogFragment.show(fm, "fragment_edit_name");
+        contactDialogFragment.show(fm, "fragment_contact");
     }
 
     @Override

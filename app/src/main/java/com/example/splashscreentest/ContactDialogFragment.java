@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ import java.util.EventListener;
 
 public class ContactDialogFragment extends DialogFragment implements EventListener {
     private String firstName, lastName, email, address, phoneNumber, birthday, pictureUrl;
-    private Boolean isMale, hideSave;
+    private Boolean isMale, hideSave, isError;
     private OnSave dataPasser;
 
     /**
@@ -67,6 +68,7 @@ public class ContactDialogFragment extends DialogFragment implements EventListen
         this.birthday = bundle.getString("birthday");
         this.pictureUrl = bundle.getString("pictureUrl");
         this.hideSave = bundle.getBoolean("hideSave");
+        this.isError = bundle.getBoolean("error");
         return inflater.inflate(R.layout.contact_dialog, container);
     }
 
@@ -94,45 +96,48 @@ public class ContactDialogFragment extends DialogFragment implements EventListen
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TextView firstName = (TextView) view.findViewById(R.id.first_name_text_view);
-        firstName.setText(this.firstName);
-        TextView lastName = (TextView) view.findViewById(R.id.last_name_text_view);
-        lastName.setText(this.lastName);
-        TextView email = (TextView) view.findViewById(R.id.email_text_view);
-        email.setText(this.email);
-        TextView phoneNumber = (TextView) view.findViewById(R.id.phone_number_text_view);
-        phoneNumber.setText(this.phoneNumber);
-        TextView address = (TextView) view.findViewById(R.id.address_text_view);
-        address.setText(this.address);
-        TextView birthday = (TextView) view.findViewById(R.id.birthday_text_view);
-        birthday.setText(this.birthday);
-        final ImageView contactPhotoView = (ImageView) view.findViewById(R.id.contact_photo_image_view);
-        /**
-         * This will make an image request via volley
-         * Then it will add it to the request queue
-         * On success it will add the image to the ImageView
-         * On fail it does NOTHING.
-         */
-        ImageRequest request = new ImageRequest(this.pictureUrl,
-                new Response.Listener<Bitmap>() {
-                    @Override
-                    public void onResponse(Bitmap bitmap) {
-                        contactPhotoView.setImageBitmap(bitmap);
-                    }
-                }, 0, 0, null,
-                new Response.ErrorListener() {
-                    public void onErrorResponse(VolleyError error) {
-                        System.out.println(error);
-                        if (isMale) {
-                            contactPhotoView.setImageResource(R.drawable.male);
-                        } else {
-                            contactPhotoView.setImageResource(R.drawable.female);
+        if (isError) {
+            displayError(view, savedInstanceState);
+        } else {
+            TextView firstName = (TextView) view.findViewById(R.id.first_name_text_view);
+            firstName.setText(this.firstName);
+            TextView lastName = (TextView) view.findViewById(R.id.last_name_text_view);
+            lastName.setText(this.lastName);
+            TextView email = (TextView) view.findViewById(R.id.email_text_view);
+            email.setText(this.email);
+            TextView phoneNumber = (TextView) view.findViewById(R.id.phone_number_text_view);
+            phoneNumber.setText(this.phoneNumber);
+            TextView address = (TextView) view.findViewById(R.id.address_text_view);
+            address.setText(this.address);
+            TextView birthday = (TextView) view.findViewById(R.id.birthday_text_view);
+            birthday.setText(this.birthday);
+            final ImageView contactPhotoView = (ImageView) view.findViewById(R.id.contact_photo_image_view);
+            /**
+             * This will make an image request via volley
+             * Then it will add it to the request queue
+             * On success it will add the image to the ImageView
+             * On fail it does NOTHING.
+             */
+            ImageRequest request = new ImageRequest(this.pictureUrl,
+                    new Response.Listener<Bitmap>() {
+                        @Override
+                        public void onResponse(Bitmap bitmap) {
+                            contactPhotoView.setImageBitmap(bitmap);
                         }
-                    }
-                });
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        queue.add(request);
-
+                    }, 0, 0, null,
+                    new Response.ErrorListener() {
+                        public void onErrorResponse(VolleyError error) {
+                            System.out.println(error);
+                            if (isMale) {
+                                contactPhotoView.setImageResource(R.drawable.male);
+                            } else {
+                                contactPhotoView.setImageResource(R.drawable.female);
+                            }
+                        }
+                    });
+            RequestQueue queue = Volley.newRequestQueue(getContext());
+            queue.add(request);
+        }
         Button cancelBtn = (Button) view.findViewById(R.id.cancel_button);
         cancelBtn.setOnClickListener(btnListener);
 
@@ -146,6 +151,24 @@ public class ContactDialogFragment extends DialogFragment implements EventListen
         } else {
             saveBtn.setOnClickListener(btnListener);
         }
+
+    }
+
+    private void displayError(View view, @Nullable Bundle savedInstanceState) {
+        TextView firstName = (TextView) view.findViewById(R.id.first_name_text_view);
+        firstName.setText("ERROR");
+        TextView lastName = (TextView) view.findViewById(R.id.last_name_text_view);
+        lastName.setVisibility(View.GONE);
+//        LinearLayout textWrapper = (LinearLayout) view.findViewById(R.id.text_wrapper_layout);
+//        textWrapper.setGravity(Gravity.CENTER);
+        TextView email = (TextView) view.findViewById(R.id.email_text_view);
+        email.setText("New contacts are currently not available.");
+        TextView phoneNumber = (TextView) view.findViewById(R.id.phone_number_text_view);
+        phoneNumber.setVisibility(View.GONE);
+        TextView address = (TextView) view.findViewById(R.id.address_text_view);
+        address.setVisibility(View.GONE);
+        TextView birthday = (TextView) view.findViewById(R.id.birthday_text_view);
+        birthday.setVisibility(View.GONE);
     }
 
     private View.OnClickListener btnListener = new View.OnClickListener() {
