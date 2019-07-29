@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,19 +45,18 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
     private ArrayList<Contact> contactsList = new ArrayList<>();
     private Contact currentContact;
     private ListView contactsListView;
-    private ContactAdapter contactsAdapter;
+//    private ContactAdapter contactsAdapter;
     private DataBaseHelper dbHandler;
 
     /**
      * VARS FOR RECYCLERVIEW
      */
     private RecyclerView contactsRecyclerView;
-    private RecyclerView.Adapter adapter;
+    private ContactsAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        System.out.println("onCreate now running");
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         if (dbHandler.hasContacts()) {
             getDbContacts();
         }
+
+        setUpRecyclerView();
 
         contactsRecyclerView = findViewById(R.id.contacts_recycler_view);
 //        this says it will not change in size no matter how many items that are in the recycler view
@@ -133,6 +135,17 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
             }
         });
 
+    }
+
+    private void setUpRecyclerView() {
+        contactsRecyclerView = findViewById(R.id.contacts_recycler_view);
+        contactsRecyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        adapter = new ContactsAdapter(contactsList);
+
+//        pass everything to the recycler view
+        contactsRecyclerView.setLayoutManager(layoutManager);
+        contactsRecyclerView.setAdapter(adapter);
     }
 
     private void showNewContactDialog(Bundle bundle) {
@@ -220,6 +233,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             /**
              * Wont use this one because we want to filter in real-time
@@ -236,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
              */
             @Override
             public boolean onQueryTextChange(String s) {
-//                adapter.getFilter().filter(s);
+                adapter.getFilter().filter(s);
                 return false;
             }
         });

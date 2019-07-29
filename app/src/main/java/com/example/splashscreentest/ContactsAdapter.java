@@ -1,7 +1,5 @@
 package com.example.splashscreentest;
 
-import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.Volley;
-
 import java.util.ArrayList;
 
+/**
+ * THIS IS THE NEW ONE!!!
+ */
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ContactViewHolder> implements Filterable {
 
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
@@ -120,11 +115,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             ArrayList<Contact> filteredList = new ArrayList<>();
 
             if (constraint == null || constraint.length() == 0) {
-                System.out.println(contactArrayListFull);
                 filteredList.addAll(contactArrayListFull);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
-                System.out.println(filterPattern);
 
                 for (Contact item : contactArrayListFull) {
                     if (item.getFirstName().toLowerCase().trim().contains(filterPattern)){
@@ -132,6 +125,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
                     }
                 }
             }
+
+
             FilterResults results = new FilterResults();
             results.values = filteredList;
             return results;
@@ -140,12 +135,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         /**
          * Publishes the results of the filter to the UI
          * @param charSequence
-         * @param filterResults - the results of the filter
+         * @param filteredResults - the results of the filter
          */
         @Override
-        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+        protected void publishResults(CharSequence charSequence, FilterResults filteredResults) {
             contactArrayList.clear();
-            contactArrayList.addAll((ArrayList)filterResults.values);
+            contactArrayList.addAll((ArrayList<Contact>) filteredResults.values);
             notifyDataSetChanged();
         }
     };
