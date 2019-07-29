@@ -105,21 +105,25 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
             }
         });
 
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
+//        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+//            @Override
+//            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+//                return false;
+//            }
+//
+//            @Override
+//            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+//                Contact toDelete = adapter.getContact(viewHolder.getAdapterPosition());
+//                Toast.makeText(MainActivity.this, "Contact Deleted", Toast.LENGTH_SHORT).show();
+//                contactsList.remove(toDelete);
+//                dbHandler.deleteContact(toDelete);
+//                checkListSize();
+//            }
+//        }).attachToRecyclerView(contactsRecyclerView);
 
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                Contact toDelete = adapter.getContact(viewHolder.getAdapterPosition());
-                Toast.makeText(MainActivity.this, "Contact Deleted", Toast.LENGTH_SHORT).show();
-                contactsList.remove(toDelete);
-                dbHandler.deleteContact(toDelete);
-                checkListSize();
-            }
-        }).attachToRecyclerView(contactsRecyclerView);
+        SwipeController swipeController = new SwipeController();
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeController);
+        itemTouchHelper.attachToRecyclerView(contactsRecyclerView);
 
     }
 
