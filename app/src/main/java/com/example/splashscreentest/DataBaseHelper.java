@@ -50,7 +50,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    //    Add new row to the db
+    /**
+     * Add new row to the db
+     */
     public void addContact(Contact contact) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_FIRSTNAME, contact.getFirstName());
@@ -66,18 +68,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    //    Delete a contact from the db
+    /**
+     * Delete a contact from the db
+     */
     public void deleteContact(Contact contact) {
         SQLiteDatabase db = getWritableDatabase();
-//        String query = "DELETE TOP(1) FROM " + TABLE_CONTACTS +" WHERE " ;
-//
-//                query = COLUMN_FIRSTNAME + " = " + contact.getFirstName() +
-//                " AND " + COLUMN_LASTNAME + " = " + contact.getLastName();
-
-        db.delete(TABLE_CONTACTS, COLUMN_FIRSTNAME + "=? and " + COLUMN_LASTNAME+ "=?",
+        db.delete(TABLE_CONTACTS, COLUMN_FIRSTNAME + "=? and " + COLUMN_LASTNAME + "=?",
                 new String[]{contact.getFirstName(), contact.getLastName()});
     }
 
+    /**
+     * This method is for TESTING ONLY
+     */
     public void deleteAll() {
         SQLiteDatabase db = getWritableDatabase();
 
@@ -86,7 +88,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL(query);
     }
 
-
+    /**
+     * Determines if there is data in the db
+     * @return Boolean
+     */
     public boolean hasContacts() {
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT " + "*" + " FROM " + TABLE_CONTACTS;
@@ -99,6 +104,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * This will convert all the data in db to an Array of Contacts
+     * @return Contact[]
+     */
     public Contact[] databaseToArray() {
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT " + "*" + " FROM " + TABLE_CONTACTS;
@@ -124,32 +133,5 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         dataCursor.close();
         db.close();
         return contacts;
-    }
-
-    public ArrayList<Contact> databaseToArrayList() {
-        ArrayList<Contact> contactsList = new ArrayList<>();
-        SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT " + "*" + " FROM " + TABLE_CONTACTS;
-
-        dataCursor = db.rawQuery(query, null);
-//        Contact[] contacts = new Contact[dataCursor.getCount()];
-        while (dataCursor.moveToNext()) {
-            Contact currentContact = new Contact(
-                    dataCursor.getString(1),
-                    dataCursor.getString(2),
-                    dataCursor.getString(3),
-                    dataCursor.getString(4),
-                    dataCursor.getString(5),
-                    dataCursor.getString(6),
-                    dataCursor.getString(7),
-                    dataCursor.getString(8)
-            );
-            contactsList.add(currentContact);
-        }
-
-        dataCursor.close();
-        db.close();
-
-        return contactsList;
     }
 }

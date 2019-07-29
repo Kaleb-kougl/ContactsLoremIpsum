@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
                 Toast.makeText(MainActivity.this, "Contact Deleted", Toast.LENGTH_SHORT).show();
                 contactsList.remove(toDelete);
                 dbHandler.deleteContact(toDelete);
+                adapter.notifyDataSetChanged();
                 checkListSize();
             }
         }).attachToRecyclerView(contactsRecyclerView);
@@ -148,6 +149,10 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         }
     }
 
+    /**
+     * Presents a dialog to the user with a new contact using bundle passed
+     * @param bundle - A contact bundle
+     */
     private void showNewContactDialog(Bundle bundle) {
         FragmentManager fm = getSupportFragmentManager();
         ContactDialogFragment contactDialogFragment = ContactDialogFragment.newInstance();
@@ -155,12 +160,18 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         contactDialogFragment.show(fm, "fragment_contact");
     }
 
+    /**
+     * Save the new contact to the ArrayList and DB
+     */
     @Override
     public void onSave() {
         insert(currentContact);
         dbHandler.addContact(currentContact);
     }
 
+    /**
+     * Retrieve all of the contacts from the DB
+     */
     private void getDbContacts() {
         Contact[] dbContacts = dbHandler.databaseToArray();
         for (Contact currentContact : dbContacts) {
@@ -184,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
     }
 
     /**
-     * This creates our custom options menu
+     * options menu with search functionality
      *
      * @param menu
      * @return

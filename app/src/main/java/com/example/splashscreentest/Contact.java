@@ -24,18 +24,6 @@ public class Contact implements Comparable<Contact>{
     private String pictureUrlString;
     private Bundle contactBundle = new Bundle();
 
-    public Bundle getBundle() {
-        contactBundle.putString("firstName", getFirstName());
-        contactBundle.putString("lastName", getLastName());
-        contactBundle.putString("email", getEmail());
-        contactBundle.putString("number", getNumber());
-        contactBundle.putString("address", getAddress());
-        contactBundle.putString("birthday", getBirthday());
-        contactBundle.putBoolean("isMale", getIsMale());
-        contactBundle.putString("pictureUrl", getPictureUrlString());
-        return contactBundle;
-    }
-
     public String getFirstName() {
         return StringFormatter.capitalizeWord(firstName);
     }
@@ -68,10 +56,41 @@ public class Contact implements Comparable<Contact>{
         return isMale;
     }
 
+    /**
+     * Creates a bundle from Contact data
+     * @return Bundle
+     */
+    public Bundle getBundle() {
+        contactBundle.putString("firstName", getFirstName());
+        contactBundle.putString("lastName", getLastName());
+        contactBundle.putString("email", getEmail());
+        contactBundle.putString("number", getNumber());
+        contactBundle.putString("address", getAddress());
+        contactBundle.putString("birthday", getBirthday());
+        contactBundle.putBoolean("isMale", getIsMale());
+        contactBundle.putString("pictureUrl", getPictureUrlString());
+        return contactBundle;
+    }
+
+    /**
+     * Constructor that accepts json
+     * @param json
+     */
     public Contact(@NonNull JSONObject json) {
         parseJson(json);
     }
 
+    /**
+     * Constructor that accepts every field of Contact object
+     * @param firstName
+     * @param lastName
+     * @param email
+     * @param number
+     * @param address
+     * @param birthday
+     * @param pictureUrl
+     * @param isMale
+     */
     public Contact(@NonNull String firstName,
                    @NonNull String lastName,
                    @NonNull String email,
@@ -130,6 +149,12 @@ public class Contact implements Comparable<Contact>{
         }
     }
 
+    /**
+     * Allows Contact objects to be compared with other Contact objects
+     * Compares the firstName of Contact object
+     * @param contact
+     * @return
+     */
     @Override
     public int compareTo(Contact contact) {
         return this.firstName.compareTo(contact.getFirstName());
