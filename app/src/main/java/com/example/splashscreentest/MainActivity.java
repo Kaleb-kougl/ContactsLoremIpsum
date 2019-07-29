@@ -6,21 +6,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -44,8 +37,6 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
     private JSONObject contactJSON;
     private ArrayList<Contact> contactsList = new ArrayList<>();
     private Contact currentContact;
-    private ListView contactsListView;
-    //    private ContactAdapter contactsAdapter;
     private DataBaseHelper dbHandler;
 
     /**
@@ -67,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         }
 
         setUpRecyclerView();
-            
+
 //        //An event listener for the '+' btn
         Button add = (Button) findViewById(R.id.add_button);
         add.setOnClickListener(new View.OnClickListener() {
@@ -141,16 +132,6 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
     public void onSave() {
         insert(currentContact);
         dbHandler.addContact(currentContact);
-        updateListView();
-    }
-
-    private void hideDefaultText() {
-        LinearLayout emptyData = (LinearLayout) findViewById(R.id.empty_text_view);
-        emptyData.setVisibility(View.GONE);
-    }
-
-    interface SwipeEvents {
-        void onSwipeLeft(boolean swiped, int position);
     }
 
     private void getDbContacts() {
@@ -160,36 +141,6 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         }
         Collections.sort(contactsList);
 
-        /**
-         * CODE FOR LISTVIEW
-         */
-//        updateListView();
-    }
-
-    private void updateListView() {
-        Collections.sort(contactsList);
-
-        contactsListView.invalidateViews();
-
-        contactsListView.setVisibility(View.VISIBLE);
-//        final OnSwipeTouchListener swipeListener = new OnSwipeTouchListener(MainActivity.this) {
-//            public void onSwipeLeft() {
-//                Toast.makeText(MainActivity.this, "swipe: ", Toast.LENGTH_SHORT).show();
-////                return true;
-////                return true;
-//                System.out.println("swipe");
-//            }
-//        };
-//        contactsListView.setOnTouchListener(swipeListener);
-
-        contactsListView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                Bundle bundle = contactsList.get(position).getBundle();
-                bundle.putBoolean("hideSave", true);
-                showNewContactDialog(bundle);
-            }
-        });
-        hideDefaultText();
     }
 
     /**
