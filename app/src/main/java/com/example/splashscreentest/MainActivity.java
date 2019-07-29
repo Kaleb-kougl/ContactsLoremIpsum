@@ -1,7 +1,9 @@
 package com.example.splashscreentest;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -102,6 +105,22 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
             }
         });
 
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+//                call delete
+                Contact toDelete = adapter.getContact(viewHolder.getAdapterPosition());
+                Toast.makeText(MainActivity.this, "Contact Deleted", Toast.LENGTH_SHORT).show();
+                contactsList.remove(toDelete);
+                dbHandler.deleteContact(toDelete);
+            }
+        }).attachToRecyclerView(contactsRecyclerView);
+
     }
 
     private void setUpRecyclerView() {
@@ -109,7 +128,8 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         contactsRecyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         adapter = new ContactsAdapter(contactsList, new ContactsAdapter.OnItemClickListener() {
-            @Override public void onItemClick(Contact contact) {
+            @Override
+            public void onItemClick(Contact contact) {
                 Bundle bundle = contact.getBundle();
                 bundle.putBoolean("hideSave", true);
                 showNewContactDialog(bundle);

@@ -175,4 +175,13 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             notifyDataSetChanged();
         }
     };
+
+    /**
+     * Get a specific from the list of contacts displayed on screen
+     * @param position - the position of the contact;
+     * @return
+     */
+    public Contact getContact(int position) {
+        return contactArrayList.get(position);
+    }
 }
