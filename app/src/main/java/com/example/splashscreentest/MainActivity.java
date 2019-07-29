@@ -113,11 +113,11 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-//                call delete
                 Contact toDelete = adapter.getContact(viewHolder.getAdapterPosition());
                 Toast.makeText(MainActivity.this, "Contact Deleted", Toast.LENGTH_SHORT).show();
                 contactsList.remove(toDelete);
                 dbHandler.deleteContact(toDelete);
+                checkListSize();
             }
         }).attachToRecyclerView(contactsRecyclerView);
 
@@ -135,10 +135,17 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
                 showNewContactDialog(bundle);
             }
         });
+        checkListSize();
 
 //        pass everything to the recycler view
         contactsRecyclerView.setLayoutManager(layoutManager);
         contactsRecyclerView.setAdapter(adapter);
+    }
+
+    private void checkListSize(){
+        if (adapter.getItemCount() == 0){
+            findViewById(R.id.contacts_recycler_view).setVisibility(View.GONE);
+        }
     }
 
     private void showNewContactDialog(Bundle bundle) {
@@ -173,6 +180,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         if (pos < 0) {
             contactsList.add(-pos - 1, newContact);
         }
+        adapter.notifyDataSetChanged();
     }
 
     /**

@@ -73,7 +73,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 //
 //                query = COLUMN_FIRSTNAME + " = " + contact.getFirstName() +
 //                " AND " + COLUMN_LASTNAME + " = " + contact.getLastName();
-        
+
         db.delete(TABLE_CONTACTS, COLUMN_FIRSTNAME + "=? and " + COLUMN_LASTNAME+ "=?",
                 new String[]{contact.getFirstName(), contact.getLastName()});
     }
