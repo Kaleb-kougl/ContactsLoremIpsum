@@ -47,7 +47,7 @@
             android:id="@+id/contact_row_email_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="123@example.com" />
+            android:text="1@example.com" />
     </LinearLayout>
     <Button
         android:layout_gravity="center"

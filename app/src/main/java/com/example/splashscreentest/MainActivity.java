@@ -91,49 +91,49 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
 //
 //
 //        //An event listener for the '+' btn
-//        Button add = (Button) findViewById(R.id.add_button);
-//        add.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                final TextView textView = (TextView) findViewById(R.id.first_text_view);
-//
-//                //Instantiate the RequestQueue.
-//                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-////              TODO: Put this in a resources file
-//                final String url = "https://randomuser.me/api/?nat=us";
-//
-//                //Request a string response from the provided url
-//                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-//                        new Response.Listener<String>() {
-//                            @Override
-//                            public void onResponse(String response) {
-//                                try {
-//                                    contactJSON = new JSONObject(response);
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//                                currentContact = new Contact(contactJSON);
-//                                Bundle bundle = currentContact.getBundle();
-//                                bundle.putBoolean("error", false);
-//                                showNewContactDialog(bundle);
-//
-//                            }
-//                        }, new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Log.e(TAG, "onErrorResponse: BAD HTTP REQUEST" + error.toString(), error);
-////                        TODO: Put this a resources file
-//                        System.out.println("something went wrong" + error);
-//                        Bundle errorBundle = new Bundle();
-//                        errorBundle.putBoolean("error", true);
-//                        errorBundle.putBoolean("hideSave", true);
-//                        showNewContactDialog(errorBundle);
-//                    }
-//                });
-//                //Add the request to the RequestQueue
-//                queue.add(stringRequest);
-//            }
-//        });
+        Button add = (Button) findViewById(R.id.add_button);
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final TextView textView = (TextView) findViewById(R.id.first_text_view);
+
+                //Instantiate the RequestQueue.
+                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+//              TODO: Put this in a resources file
+                final String url = "https://randomuser.me/api/?nat=us";
+
+                //Request a string response from the provided url
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    contactJSON = new JSONObject(response);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                currentContact = new Contact(contactJSON);
+                                Bundle bundle = currentContact.getBundle();
+                                bundle.putBoolean("error", false);
+                                showNewContactDialog(bundle);
+
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, "onErrorResponse: BAD HTTP REQUEST" + error.toString(), error);
+//                        TODO: Put this a resources file
+                        System.out.println("something went wrong" + error);
+                        Bundle errorBundle = new Bundle();
+                        errorBundle.putBoolean("error", true);
+                        errorBundle.putBoolean("hideSave", true);
+                        showNewContactDialog(errorBundle);
+                    }
+                });
+                //Add the request to the RequestQueue
+                queue.add(stringRequest);
+            }
+        });
 
     }
 
