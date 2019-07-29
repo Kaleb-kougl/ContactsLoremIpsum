@@ -122,8 +122,6 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, "onErrorResponse: BAD HTTP REQUEST" + error.toString(), error);
-//                        TODO: Put this a resources file
-                        System.out.println("something went wrong" + error);
                         Bundle errorBundle = new Bundle();
                         errorBundle.putBoolean("error", true);
                         errorBundle.putBoolean("hideSave", true);
@@ -146,7 +144,6 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
 
     @Override
     public void onSave() {
-//        contactsList.add(currentContact);
         insert(currentContact);
         dbHandler.addContact(currentContact);
         updateListView();
@@ -166,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         for (Contact currentContact : dbContacts) {
             contactsList.add(currentContact);
         }
+        Collections.sort(contactsList);
 
         /**
          * CODE FOR LISTVIEW
@@ -179,15 +177,15 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         contactsListView.invalidateViews();
 
         contactsListView.setVisibility(View.VISIBLE);
-        final OnSwipeTouchListener swipeListener = new OnSwipeTouchListener(MainActivity.this) {
-            public void onSwipeLeft() {
-                Toast.makeText(MainActivity.this, "swipe: ", Toast.LENGTH_SHORT).show();
-//                return true;
-//                return true;
-                System.out.println("swipe");
-            }
-        };
-        contactsListView.setOnTouchListener(swipeListener);
+//        final OnSwipeTouchListener swipeListener = new OnSwipeTouchListener(MainActivity.this) {
+//            public void onSwipeLeft() {
+//                Toast.makeText(MainActivity.this, "swipe: ", Toast.LENGTH_SHORT).show();
+////                return true;
+////                return true;
+//                System.out.println("swipe");
+//            }
+//        };
+//        contactsListView.setOnTouchListener(swipeListener);
 
         contactsListView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
@@ -199,6 +197,10 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         hideDefaultText();
     }
 
+    /**
+     * Inserts a new contact into arrayList in Alphabetical order
+     * @param newContact - contact to be inserted
+     */
     private void insert(Contact newContact) {
         int pos = Collections.binarySearch(contactsList, newContact);
         if (pos < 0) {
@@ -234,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
              */
             @Override
             public boolean onQueryTextChange(String s) {
-                contactsAdapter.getFilter().filter(s);
+//                adapter.getFilter().filter(s);
                 return false;
             }
         });
