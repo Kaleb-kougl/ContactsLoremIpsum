@@ -134,13 +134,13 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
 
     @Override
     public Filter getFilter() {
-        return firstNameFilter;
+        return fullNameFilter;
     }
 
     /**
      * A filter to see if the contacts first name contains the users text
      */
-    private Filter firstNameFilter = new Filter() {
+    private Filter fullNameFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             ArrayList<Contact> filteredList = new ArrayList<>();
@@ -151,7 +151,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
                 for (Contact item : contactArrayListFull) {
-                    if (item.getFirstName().toLowerCase().trim().contains(filterPattern)){
+                    String fullName = item.getFirstName().toLowerCase().trim() + " "
+                            + item.getLastName().toLowerCase().trim();
+                    if (fullName.contains(filterPattern)){
                         filteredList.add(item);
                     }
                 }
