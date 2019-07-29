@@ -2,6 +2,8 @@ package com.example.splashscreentest;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -45,65 +47,93 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
     private ContactAdapter contactsAdapter;
     private DataBaseHelper dbHandler;
 
+    /**
+     * VARS FOR RECYCLERVIEW
+     */
+    private RecyclerView contactsRecyclerView;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("onCreate now running");
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        dbHandler = new DataBaseHelper(this, null, null, 1);
 
-        this.contactsListView = (ListView) findViewById(R.id.contacts_list_view);
+        /**
+         * CODE FOR LISTVIEW MIXED IN BELOW HERE
+         */
+        dbHandler = new DataBaseHelper(this, null, null, 1);
+//
+//        this.contactsListView = (ListView) findViewById(R.id.contacts_list_view);
         if (dbHandler.hasContacts()) {
             getDbContacts();
         }
-        this.contactsAdapter = new ContactAdapter(this, contactsList);
-        contactsListView.setAdapter(contactsAdapter);
+
+        contactsRecyclerView = findViewById(R.id.contacts_recycler_view);
+//        this says it will not change in size no matter how many items that are in the recycler view
+//        optimizes performance
+        contactsRecyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        adapter = new ContactsAdapter(contactsList);
+
+//        pass everything to the recycler view
+        contactsRecyclerView.setLayoutManager(layoutManager);
+        contactsRecyclerView.setAdapter(adapter);
 
 
-        //An event listener for the '+' btn
-        Button add = (Button) findViewById(R.id.add_button);
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final TextView textView = (TextView) findViewById(R.id.first_text_view);
-
-                //Instantiate the RequestQueue.
-                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-//              TODO: Put this in a resources file
-                final String url = "https://randomuser.me/api/?nat=us";
-
-                //Request a string response from the provided url
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                try {
-                                    contactJSON = new JSONObject(response);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                currentContact = new Contact(contactJSON);
-                                Bundle bundle = currentContact.getBundle();
-                                bundle.putBoolean("error", false);
-                                showNewContactDialog(bundle);
-
-                            }
-                        }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, "onErrorResponse: BAD HTTP REQUEST" + error.toString(), error);
-//                        TODO: Put this a resources file
-                        System.out.println("something went wrong" + error);
-                        Bundle errorBundle = new Bundle();
-                        errorBundle.putBoolean("error", true);
-                        errorBundle.putBoolean("hideSave", true);
-                        showNewContactDialog(errorBundle);
-                    }
-                });
-                //Add the request to the RequestQueue
-                queue.add(stringRequest);
-            }
-        });
+        /**
+         * CODE FOR LISTVIEW ONLY (BELOW HERE)
+         */
+//        this.contactsAdapter = new ContactAdapter(this, contactsList);
+//        contactsListView.setAdapter(contactsAdapter);
+//
+//
+//        //An event listener for the '+' btn
+//        Button add = (Button) findViewById(R.id.add_button);
+//        add.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                final TextView textView = (TextView) findViewById(R.id.first_text_view);
+//
+//                //Instantiate the RequestQueue.
+//                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+////              TODO: Put this in a resources file
+//                final String url = "https://randomuser.me/api/?nat=us";
+//
+//                //Request a string response from the provided url
+//                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+//                        new Response.Listener<String>() {
+//                            @Override
+//                            public void onResponse(String response) {
+//                                try {
+//                                    contactJSON = new JSONObject(response);
+//                                } catch (JSONException e) {
+//                                    e.printStackTrace();
+//                                }
+//                                currentContact = new Contact(contactJSON);
+//                                Bundle bundle = currentContact.getBundle();
+//                                bundle.putBoolean("error", false);
+//                                showNewContactDialog(bundle);
+//
+//                            }
+//                        }, new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Log.e(TAG, "onErrorResponse: BAD HTTP REQUEST" + error.toString(), error);
+////                        TODO: Put this a resources file
+//                        System.out.println("something went wrong" + error);
+//                        Bundle errorBundle = new Bundle();
+//                        errorBundle.putBoolean("error", true);
+//                        errorBundle.putBoolean("hideSave", true);
+//                        showNewContactDialog(errorBundle);
+//                    }
+//                });
+//                //Add the request to the RequestQueue
+//                queue.add(stringRequest);
+//            }
+//        });
 
     }
 
@@ -132,13 +162,15 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
     }
 
     private void getDbContacts() {
-//        ArrayList<Contact> checkme = (ArrayList<Contact>)dbHandler.databaseToArrayList();
         Contact[] dbContacts = dbHandler.databaseToArray();
         for (Contact currentContact : dbContacts) {
             contactsList.add(currentContact);
         }
 
-        updateListView();
+        /**
+         * CODE FOR LISTVIEW
+         */
+//        updateListView();
     }
 
     private void updateListView() {
