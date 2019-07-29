@@ -7,6 +7,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,20 +39,47 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             lastNameTV = itemView.findViewById(R.id.contact_row_last_name_text_view);
             emailTV = itemView.findViewById(R.id.contact_row_email_text_view);
             contactIV = itemView.findViewById(R.id.contact_row_image_view);
+
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//
+//                }
+//            });
+        }
+
+        public void bind(final Contact contact, final OnItemClickListener listener) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    listener.onItemClick(contact);
+                }
+            });
         }
     }
 
     private ArrayList<Contact> contactArrayList;
     private ArrayList<Contact> contactArrayListFull;
 
+
+    public interface OnItemClickListener{
+        void onItemClick(Contact contact);
+    }
+
+//    public void setOnItemClickListener(OnItemClickListener listener){
+//        mListener = listener;
+//    }
+
+    private final OnItemClickListener listener;
+
     /**
      * Constructor
      * store two separate arrayLists
      * @param contactArrayList - The ArrayList of contacts that should be made visible
      */
-    public ContactsAdapter(ArrayList<Contact> contactArrayList) {
+    public ContactsAdapter(ArrayList<Contact> contactArrayList, OnItemClickListener listener) {
         this.contactArrayList = contactArrayList;
         this.contactArrayListFull = new ArrayList<>(contactArrayList);
+        this.listener = listener;
     }
 
     /**
@@ -90,6 +118,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         } else {
             holder.contactIV.setImageResource(R.drawable.female);
         }
+
+        holder.bind(contactArrayList.get(position), listener);
     }
 
     /**
@@ -100,6 +130,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     public int getItemCount() {
         return contactArrayList.size();
     }
+
+
 
     @Override
     public Filter getFilter() {

@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
     private ArrayList<Contact> contactsList = new ArrayList<>();
     private Contact currentContact;
     private ListView contactsListView;
-//    private ContactAdapter contactsAdapter;
+    //    private ContactAdapter contactsAdapter;
     private DataBaseHelper dbHandler;
 
     /**
@@ -61,37 +61,13 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /**
-         * CODE FOR LISTVIEW MIXED IN BELOW HERE
-         */
         dbHandler = new DataBaseHelper(this, null, null, 1);
-//
-//        this.contactsListView = (ListView) findViewById(R.id.contacts_list_view);
         if (dbHandler.hasContacts()) {
             getDbContacts();
         }
 
         setUpRecyclerView();
-
-        contactsRecyclerView = findViewById(R.id.contacts_recycler_view);
-//        this says it will not change in size no matter how many items that are in the recycler view
-//        optimizes performance
-        contactsRecyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        adapter = new ContactsAdapter(contactsList);
-
-//        pass everything to the recycler view
-        contactsRecyclerView.setLayoutManager(layoutManager);
-        contactsRecyclerView.setAdapter(adapter);
-
-
-        /**
-         * CODE FOR LISTVIEW ONLY (BELOW HERE)
-         */
-//        this.contactsAdapter = new ContactAdapter(this, contactsList);
-//        contactsListView.setAdapter(contactsAdapter);
-//
-//
+            
 //        //An event listener for the '+' btn
         Button add = (Button) findViewById(R.id.add_button);
         add.setOnClickListener(new View.OnClickListener() {
@@ -141,7 +117,13 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
         contactsRecyclerView = findViewById(R.id.contacts_recycler_view);
         contactsRecyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
-        adapter = new ContactsAdapter(contactsList);
+        adapter = new ContactsAdapter(contactsList, new ContactsAdapter.OnItemClickListener() {
+            @Override public void onItemClick(Contact contact) {
+                Bundle bundle = contact.getBundle();
+                bundle.putBoolean("hideSave", true);
+                showNewContactDialog(bundle);
+            }
+        });
 
 //        pass everything to the recycler view
         contactsRecyclerView.setLayoutManager(layoutManager);
@@ -212,17 +194,19 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
 
     /**
      * Inserts a new contact into arrayList in Alphabetical order
+     *
      * @param newContact - contact to be inserted
      */
     private void insert(Contact newContact) {
         int pos = Collections.binarySearch(contactsList, newContact);
         if (pos < 0) {
-            contactsList.add(-pos-1, newContact);
+            contactsList.add(-pos - 1, newContact);
         }
     }
 
     /**
      * This creates our custom options menu
+     *
      * @param menu
      * @return
      */
