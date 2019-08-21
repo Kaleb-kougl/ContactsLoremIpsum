@@ -34,7 +34,7 @@ import java.util.Collections;
 public class MainActivity extends AppCompatActivity implements ContactDialogFragment.OnSave {
 
     /**
-     * This is used to log the error
+     * Used to log the error
      */
     private static final String TAG = "MainActivity";
     private JSONObject contactJSON;
@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //launch screen then switch to app screen
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
 
         setUpRecyclerView();
 
-//        //An event listener for the '+' btn
+        //An event listener for the '+' btn
         Button add = (Button) findViewById(R.id.add_button);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +147,8 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
     private void checkListSize(){
         if (adapter.getItemCount() == 0){
             findViewById(R.id.contacts_recycler_view).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.contacts_recycler_view).setVisibility(View.VISIBLE);
         }
     }
 
@@ -192,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements ContactDialogFrag
             contactsList.add(-pos - 1, newContact);
         }
         adapter.notifyDataSetChanged();
+        checkListSize();
     }
 
     /**
